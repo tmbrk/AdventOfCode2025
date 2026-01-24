@@ -40,12 +40,9 @@ fun solvePart1(content: String): Int {
             }
         }
     }
-    for (line in out) {
-        println(line)
-    }
     val result =
         out.fold(0) { acc, str ->
-            acc + str.split("*").size - 1
+            acc + str.count { it == '*' }
         }
     return result
 }

@@ -40,6 +40,7 @@ fun solvePart1(content: String): Int {
             }
         }
     }
+
     val result =
         out.fold(0) { acc, str ->
             acc + str.count { it == '*' }
@@ -47,8 +48,41 @@ fun solvePart1(content: String): Int {
     return result
 }
 
+val cache = mutableMapOf<Pair<Int, List<String>>, Long>()
+
+fun calcPath(
+    line: Int,
+    tree: List<String>,
+): Long {
+    when {
+        cache.get(Pair(line, tree)) != null -> {
+            return cache[Pair(line, tree)]!!
+        }
+
+        tree.isEmpty() -> {
+            return 1
+        }
+
+        else -> {
+            var out: Long = 0
+            for ((i, char) in tree.first().withIndex()) {
+                when {
+                    char == '^' && i == line -> {
+                        out += calcPath(i - 1, tree.drop(1))
+                        out += calcPath(i + 1, tree.drop(1))
+                    }
+
+                    char == '.' && i == line -> {
+                        out += calcPath(line, tree.drop(1))
+                    }
+                }
+            }
+            return cache.getOrPut(Pair(line, tree)) { out }
+        }
+    }
+}
+
 fun solvePart2(content: String): Long {
     val lines = content.lines()
-    // TODO: Implement Part 2
-    return 0
+    return calcPath(lines.first().indexOf('S'), lines.drop(1))
 }

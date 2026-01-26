@@ -3,13 +3,17 @@ use std::fs;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let filename = if args.len() > 1 { &args[1] } else { "input.txt" };
+    let filename = if args.len() > 1 {
+        &args[1]
+    } else {
+        "input.txt"
+    };
 
     let content = fs::read_to_string(filename).expect("Unable to read file");
     let content = content.trim();
 
     println!("Part 1: {}", content);
-    println!("Part 11: {}", solve_part1(content));
+    println!("Part 1: {}", solve_part1(content));
     println!("Part 2: {}", solve_part2(content));
 }
 
